@@ -3,18 +3,20 @@ import { CreateUserDto } from '@dtos/users.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { User } from '@interfaces/users.interface';
 import userModel from '@models/users.model';
+import UserRepo from '@/repositories/users.repo';
 import { isEmpty } from '@utils/util';
 
 class UserService {
   public users = userModel;
+  public userRepo = new UserRepo();
 
   public async findAllUser(): Promise<User[]> {
-    const users: User[] = this.users;
+    const users: User[] = this.userRepo.getAll();
     return users;
   }
 
   public async findUserById(userId: number): Promise<User> {
-    const findUser: User = this.users.find(user => user.id === userId);
+    const findUser: User = this.userRepo.findById(userId);
     if (!findUser) throw new HttpException(409, "You're not user");
 
     return findUser;
@@ -23,12 +25,12 @@ class UserService {
   public async createUser(userData: CreateUserDto): Promise<User> {
     if (isEmpty(userData)) throw new HttpException(400, "You're not userData");
 
-    const findUser: User = this.users.find(user => user.email === userData.email);
+    const findUser: User = this.userRepo.findByEmail(userData.email);
     if (findUser) throw new HttpException(409, `Your email ${userData.email} already exists`);
 
     const hashedPassword = await hash(userData.password, 10);
-    const createUserData: User = { id: this.users.length + 1, ...userData, password: hashedPassword };
-    this.users = [...this.users, createUserData];
+    const createUserData: User = { id: this.userRepo.getNextId(), ...userData, password: hashedPassword };
+    this.userRepo.insertUser(createUserData);
 
     return createUserData;
   }
@@ -36,7 +38,7 @@ class UserService {
   public async updateUser(userId: number, userData: CreateUserDto): Promise<User[]> {
     if (isEmpty(userData)) throw new HttpException(400, "You're not userData");
 
-    const findUser: User = this.users.find(user => user.id === userId);
+    const findUser: User = this.userRepo.findById(userId);
     if (!findUser) throw new HttpException(409, "You're not user");
 
     const hashedPassword = await hash(userData.password, 10);
@@ -49,7 +51,7 @@ class UserService {
   }
 
   public async deleteUser(userId: number): Promise<User[]> {
-    const findUser: User = this.users.find(user => user.id === userId);
+    const findUser: User = this.userRepo.findById(userId);
     if (!findUser) throw new HttpException(409, "You're not user");
 
     const deleteUserData: User[] = this.users.filter(user => user.id !== findUser.id);
