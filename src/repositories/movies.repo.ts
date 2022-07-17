@@ -6,6 +6,10 @@ class MovieRepo {
   public movies = movieModel;
   public sharedMovies = sharedMovieModel;
 
+  public getMovie(movieId: number) {
+    return this.movies.find(movie => movie.id === movieId);
+  }
+
   public getSharedMovies(): SharedMovie[] {
     return this.sharedMovies;
   }

@@ -13,3 +13,5 @@ export interface SharedMovie {
   movieId: number;
   sharedby: string;
 }
+
+export type MovieResponse = Movie & { sharedBy?: string };
