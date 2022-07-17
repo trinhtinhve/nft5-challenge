@@ -17,7 +17,7 @@ class MoviesRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}`, optionAuthMiddleware, this.moviesController.getMovies);
-    this.router.post(`${this.path}/:id/shared`, authMiddleware, validationMiddleware(SharedMovieDto, 'body'), this.moviesController.shareMovie);
+    this.router.post(`${this.path}/shared`, authMiddleware, validationMiddleware(SharedMovieDto, 'body'), this.moviesController.shareMovie);
   }
 }
 

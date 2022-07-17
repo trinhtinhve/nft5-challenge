@@ -17,6 +17,14 @@ class MovieRepo {
   public getMoviesByUserId(userId: number): Movie[] {
     return this.movies.filter(movie => movie.userId === userId);
   }
+
+  public insertSharedMovie(sharedMovie: SharedMovie): void {
+    this.sharedMovies = [...this.sharedMovies, sharedMovie];
+  }
+
+  public getNextSharedMovieId(): number {
+    return this.sharedMovies.length + 1;
+  }
 }
 
 export default MovieRepo;

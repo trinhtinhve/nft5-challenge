@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { RequestWithUser } from '@/interfaces/auth.interface';
 import { User } from '@/interfaces/users.interface';
 import MovieService from '@/services/movies.service';
+import { SharedMovieDto } from '@/dtos/movies.dto';
 class MoviesController {
   public movieService = new MovieService();
 
@@ -16,9 +17,13 @@ class MoviesController {
     }
   };
 
-  public shareMovie = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public shareMovie = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
-      res.status(200).json({});
+      const user: User = req.user;
+      const sharedMovieData: SharedMovieDto = req.body;
+      const sharedMovie = this.movieService.shareMovie(user, sharedMovieData);
+
+      res.status(200).json({ data: sharedMovie });
     } catch (error) {
       next(error);
     }
