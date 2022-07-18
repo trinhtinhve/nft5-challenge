@@ -66,4 +66,8 @@ describe('Testing MovieSevice', () => {
       expect(result).toEqual(sampleResponse);
     });
   });
+
+  describe('shareMovie', () => {
+    // should be the same with test cases of getMovies above.
+  });
 });
