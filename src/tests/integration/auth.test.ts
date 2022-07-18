@@ -9,7 +9,7 @@ afterAll(async () => {
 
 describe('Testing Auth', () => {
   describe('[POST] /signup', () => {
-    it('response should have the Create userData', () => {
+    it('response should have the Create userData', async () => {
       const userData: CreateUserDto = {
         email: 'example@email.com',
         password: 'password',

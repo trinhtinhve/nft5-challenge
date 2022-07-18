@@ -9,7 +9,7 @@ class MoviesController {
   public getMovies = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const user: User = req.user;
-      const movieResponses = this.movieService.getMovies(user);
+      const movieResponses = await this.movieService.getMovies(user);
 
       res.status(200).json({ data: movieResponses });
     } catch (error) {
@@ -20,8 +20,9 @@ class MoviesController {
   public shareMovie = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const user: User = req.user;
+
       const sharedMovieData: SharedMovieDto = req.body;
-      const sharedMovie = this.movieService.shareMovie(user, sharedMovieData);
+      const sharedMovie = await this.movieService.shareMovie(user, sharedMovieData);
 
       res.status(200).json({ data: sharedMovie });
     } catch (error) {

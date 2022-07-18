@@ -20,6 +20,8 @@ const optionAuthMiddleware = async (req: RequestWithUser, res: Response, next: N
         req.user = findUser;
         next();
       }
+    } else {
+      next();
     }
   } catch (error) {
     next();
